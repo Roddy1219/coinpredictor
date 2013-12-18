@@ -37,8 +37,11 @@ class BaseCoin():
         return json.loads(c)["result"]
 
     def get_current_difficulty(self):
-        target = self.rpc("getblocktemplate")["target"]
-        return 0x00000000FFFF0000000000000000000000000000000000000000000000000000 / float(eval("0x" + target))
+        try:
+            target = self.rpc("getblocktemplate")["target"]
+            return 0x00000000FFFF0000000000000000000000000000000000000000000000000000 / float(eval("0x" + target))
+        except:
+            return None
 
     def getblock(self, number):
         """
