@@ -29,6 +29,6 @@ if __name__ == "__main__":
     #print [i.get_cached_predictions() for i in chains]
     result = {
         "generated": time.time() * 1000,
-        "results": [i.get_cached_predictions() for i in chains]
+        "results": [result for result in [i.get_cached_predictions() for i in chains] if result is not None]
     }
     open(settings.OUTPUT, "w").write(json.dumps(result, indent=4))
