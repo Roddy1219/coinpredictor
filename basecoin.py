@@ -160,7 +160,7 @@ class BaseCoin():
         key = "%spredictions" %(self.symbol)
         self.cache.set(key, json.dumps(output))
         self.cache.set("%sdirty" %(self.symbol), "1")
-        self.cache.expire("%sdirty" %(self.symbol), 60)
+        self.cache.expire("%sdirty" %(self.symbol), 300)
         return output
 
     def get_cached_predictions(self):
