@@ -166,7 +166,10 @@ class BaseCoin():
         """
         key = "%spredictions" %(self.symbol)
         keydirty = "%sdirty" %(self.symbol)
-        predictions = json.loads(self.cache.get(key))
+        predictions = None
+        cached = self.cache.get(key)
+        if cached is not None:
+            predictions = json.loads(cached)
         is_dirty = self.cache.get(keydirty) is None
         if is_dirty:
             #Staler than 2 minutes
