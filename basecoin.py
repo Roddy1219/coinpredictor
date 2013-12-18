@@ -84,9 +84,9 @@ class BaseCoin():
         hashrate = hashrate * 1.0 #make float
         if int(hashrate) / 1000000000000000 > 1:
             return "%.2f PH/s" %(hashrate / 1000000000000000)
-        if int(hashrate) / 1000000000 > 1:
-            return "%.2f TH/s" %(hashrate / 1000000000000)
         if int(hashrate) / 1000000000000 > 1:
+            return "%.2f TH/s" %(hashrate / 1000000000000)
+        if int(hashrate) / 1000000000 > 1:
             return "%.2f GH/s" %(hashrate / 1000000000)
         if int(hashrate) / 1000000 > 1:
             return "%.2f MH/s" %(hashrate / 1000000)
