@@ -25,48 +25,6 @@ class BitcoinPredictor(BaseCoin):
         self.subsidyint = 210000
         BaseCoin.__init__(self)
 
-    def get_current_difficulty(self):
-        return None
-
-    def getlastblock(self):
-        """
-        Return number of last block
-        """
-        key = "%sgetlastblock" %(self.symbol)
-        res = self.cache.get(key)
-        if res is None:
-            r,c = h.request("https://blockchain.info/q/getblockcount")
-            res = c
-            self.cache.set(key, res)
-            self.cache.expire(key, 60)
-        data = int(res)
-        return data
-
-    def getblock(self, number):
-        """
-        Given block number return the getblock eqiv
-        """
-        #print number
-        key = "%s%s" %(self.symbol, number)
-        res = self.cache.get(key)
-        if res is None:
-            r,c = h.request("http://blockexplorer.com/q/getblockhash/%s" %(number))
-            blkhash = c.strip()
-            url = "http://blockchain.info/rawblock/%s?format=json" %(blkhash)
-            #print url
-            r,c = h.request(url)
-            blk = json.loads(c)
-            del blk["tx"]
-            res = blk
-            blk["difficulty"] = self.bitstodiff(blk["bits"])
-            self.cache.set(key, json.dumps(blk))
-        else:
-            res = json.loads(res)
-        return res
-
-
-
-
 if __name__ == "__main__":
     b = BitcoinPredictor()
     print b.get_predictions()
