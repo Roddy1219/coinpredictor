@@ -1,3 +1,3 @@
-echo "predicting $1"
+echo "`date`  predicting $1"
 #echo `dirname $0` #Gets current directory...
 timeout 100 python `dirname $0`/predictor.py $1
