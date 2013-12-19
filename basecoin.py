@@ -159,7 +159,6 @@ class BaseCoin():
         output["network_hashrate"] = output["network_hashrate"]
         key = "%spredictions" %(self.symbol)
         self.cache.set(key, json.dumps(output))
-        self.cache.set("%sdirty" %(self.symbol), "1")
         return output
 
     def get_cached_predictions(self):
@@ -174,6 +173,7 @@ class BaseCoin():
             predictions = json.loads(cached)
         is_dirty = self.cache.get(keydirty) is None
         if is_dirty:
+            self.cache.set("%sdirty" %(self.symbol), "1")
             self.cache.expire("%sdirty" %(self.symbol), self.nTargetSpacing)
             #Staler than 2 minutes
             try:
