@@ -43,17 +43,19 @@ class BaseCoin():
         except:
             return None
 
-    def getblock(self, number):
+    def getblock(self, number, cached=True):
         """
         Given block number return the getblock eqiv
         """
         key = "%s%s" %(self.symbol, number)
-        res = self.cache.get(key)
+        res = None
+        if cached:
+            res = self.cache.get(key)
         if res is None:
             blkhash = self.rpc("getblockhash", paramaters=[number])
             res = self.rpc("getblock", paramaters=[blkhash])
             self.cache.set(key, json.dumps(res))
-            self.cache.expire(key, self.nTargetSpacing * 2)
+            self.cache.expire(key, self.nTargetSpacing * 3)
         else:
             res = json.loads(res)
         return res
@@ -98,6 +100,7 @@ class BaseCoin():
         """
         DRY for other coins because FRC is different
         """
+        self.getblock(lastblk)
         #currentblock = lastblk + 1
         nextintblk = ((lastblk / self.nInterval) + 1) * self.nInterval #Next change block
         rate = self.get_rate_from_hashrate(lastblk, self.estimateLookback) #Current network hashrate
