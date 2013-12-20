@@ -23,7 +23,7 @@ class LitecoinPredictor(BaseCoin):
         self.symbol = "LTC"
         self.chaintype = "scrypt"
         self.subsidyfn = lambda height: 50*100000000 >> (height + 1)//840000
-        self.subsidyint = 210000
+        self.subsidyint = 840000
         BaseCoin.__init__(self)
 
 if __name__ == "__main__":
