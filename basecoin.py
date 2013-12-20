@@ -53,7 +53,7 @@ class BaseCoin():
             blkhash = self.rpc("getblockhash", paramaters=[number])
             res = self.rpc("getblock", paramaters=[blkhash])
             self.cache.set(key, json.dumps(res))
-            self.cache.expire(key, 75)
+            self.cache.expire(key, self.nTargetSpacing * 2)
         else:
             res = json.loads(res)
         return res
