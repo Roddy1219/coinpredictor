@@ -20,6 +20,7 @@ class BitcoinPredictor(BaseCoin):
         self.estimateLookback  = 144 #Lookback 10 blocks to estimate network hashrate
         ### Chain specific ###
         self.coinname = "Bitcoin"
+        self.chaintype = "sha-256"
         self.symbol = "BTC"
         self.subsidyfn = lambda height: 50*100000000 >> (height + 1)//210000
         self.subsidyint = 210000

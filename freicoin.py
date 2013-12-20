@@ -19,6 +19,7 @@ class FreiPredictor(BaseCoin):
         ### Chain specific ###
         self.coinname = "Friecoin"
         self.symbol = "FRC"
+        self.chaintype = "sha-256"
         self.subsidyfn=lambda height: int(mpq((161280-height) * 15916928405, 161280) + mpq(9999999999999999, 1048576)) if height < 161280 else 9536743164
         self.subsidyint = 1
         BaseCoin.__init__(self)

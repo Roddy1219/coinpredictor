@@ -19,6 +19,7 @@ class ZetaPredictor(BaseCoin):
         ### Chain specific ###
         self.coinname = "Zetacoin"
         self.symbol = "ZET"
+        self.chaintype = "sha-256"
         self.subsidyfn=lambda height: 1000*100000000 >> (height + 1)//80640
         self.subsidyint = 80640
         BaseCoin.__init__(self)

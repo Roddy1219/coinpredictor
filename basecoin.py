@@ -10,7 +10,6 @@ class BaseCoin():
         self.cache = redis.StrictRedis(host='localhost', port=6379, db=0)
         self.auth_header = "Basic %s" % base64.b64encode(settings.CHAINS[self.symbol]["auth"])
         self.rpcurl = settings.CHAINS[self.symbol]["url"]
-        self.chaintype = "sha-256"
 
     def get_rate_from_hashrate(self, previous, lookback):
         """

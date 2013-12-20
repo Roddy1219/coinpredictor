@@ -18,6 +18,7 @@ class TerraPredictor(BaseCoin):
         ### Chain specific ###
         self.coinname = "Terracoin"
         self.symbol = "TRC"
+        self.chaintype = "sha-256"
         self.subsidyfn = lambda height: 20*100000000 >> (height + 1)//1050000
         self.subsidyint = 1050000
         BaseCoin.__init__(self)
