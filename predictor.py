@@ -27,7 +27,7 @@ if __name__ == "__main__":
         toreset = sys.argv[1]
         if toreset == 'checkprice':
             print "Checking prices"
-            [i.update_btc_price() for i in chains]
+            print [i.update_btc_price() for i in chains]
         else:
             print "Resetting %s" %(toreset)
             cache = redis.StrictRedis(host='localhost', port=6379, db=0)
