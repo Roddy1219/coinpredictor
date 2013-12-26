@@ -215,6 +215,7 @@ class BaseCoin():
             except:
                 print "%s prediction made err" %(self.symbol)
                 pass
+        predictions["market_price"] = self.fetch_btc_price()
         return predictions
 
 
