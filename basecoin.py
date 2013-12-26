@@ -26,6 +26,7 @@ class BaseCoin():
         """
         How much btc for 1 coin
         """
+        print self.marketid
         try:
             if self.marketid is not None:
                 url = "http://pubapi.cryptsy.com/api.php?method=singlemarketdata&marketid=%s" %(self.marketid)
