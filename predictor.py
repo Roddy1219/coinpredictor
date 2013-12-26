@@ -22,13 +22,17 @@ if __name__ == "__main__":
     #t = TerraPredictor()
     #b = BitcoinPredictor()
     #f = FreiPredictor()
+    chains = get_chains(settings.CHAINS.keys())
     if len(sys.argv) > 1:
         toreset = sys.argv[1]
-        print "Resetting %s" %(toreset)
-        cache = redis.StrictRedis(host='localhost', port=6379, db=0)
-        cache.delete("%sdirty" %(toreset))
+        if toreset == 'checkprice':
+            print "Checking prices"
+            [i.update_btc_price() for i in chains]
+        else:
+            print "Resetting %s" %(toreset)
+            cache = redis.StrictRedis(host='localhost', port=6379, db=0)
+            cache.delete("%sdirty" %(toreset))
 
-    chains = get_chains(settings.CHAINS.keys())
     #print [i.get_cached_predictions() for i in chains]
     result = {
         "generated": time.time() * 1000,

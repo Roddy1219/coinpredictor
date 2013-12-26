@@ -26,6 +26,15 @@ class BitcoinPredictor(BaseCoin):
         self.subsidyint = 210000
         BaseCoin.__init__(self)
 
+    def update_btc_price(self):
+        pass #we now 1 bitcoin is worth 1 bitcoin
+
+    def fetch_btc_price(self):
+        """
+        How much btc for 1 coin
+        """
+        return 1.00 #we now 1 bitcoin is worth 1 bitcoin
+
 if __name__ == "__main__":
     b = BitcoinPredictor()
     print b.get_predictions()

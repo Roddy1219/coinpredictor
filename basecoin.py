@@ -10,6 +10,7 @@ class BaseCoin():
         self.cache = redis.StrictRedis(host='localhost', port=6379, db=0)
         self.auth_header = "Basic %s" % base64.b64encode(settings.CHAINS[self.symbol]["auth"])
         self.rpcurl = settings.CHAINS[self.symbol]["url"]
+        self.marketid = settings.CHAINS[self.symbol].get("marketid")
 
     def get_rate_from_hashrate(self, previous, lookback):
         """
@@ -20,6 +21,32 @@ class BaseCoin():
         hashesperblk = diff * 2**48 / 0xffff
         timeperblk = hashesperblk/hashrate
         return timeperblk
+
+    def update_btc_price(self):
+        """
+        How much btc for 1 coin
+        """
+        try:
+            if self.marketid is None:
+                return None
+            url = "http://pubapi.cryptsy.com/api.php?method=singlemarketdata&marketid=%s" %(self.marketid)
+            r,c = h.request(url)
+            data = json.loads(c)['return']['markets'][self.symbol]
+            last = data['lasttradeprice']
+            bestbid = max([i['price'] for i in data['buyorders']])
+            rate = min(last, bestbid) #use lower of last trade and best bid to avoid ghost bids to jack up everything
+            key = "%sprice" %(self.symbol)
+            self.cache.set(key, rate)
+        except:
+            print "%s pricecheck error" %(self.symbol)
+
+    def fetch_btc_price(self):
+        """
+        How much btc for 1 coin
+        """
+        key = "%sprice" %(self.symbol)
+        rate = self.cache.get(key)
+        return rate
 
     def getlastblock(self):
         """
@@ -150,7 +177,8 @@ class BaseCoin():
             "next_change": (multiplier - 1) * 100,
             "next_change_unbounded": (multiplierunbounded - 1) * 100,
             "lookback": self.estimateLookback,
-            "next_change_block_time": (lastblocktime + timeremain) * 1000
+            "next_change_block_time": (lastblocktime + timeremain) * 1000,
+            "market_price": self.fetch_btc_price()
         }
         output["current_subsidy"] = self.subsidyfn(currentblock) * 1.0 / 100000000
         output["next_subsidy_int"] = ((int(lastblk) / self.subsidyint) + 1) * self.subsidyint
