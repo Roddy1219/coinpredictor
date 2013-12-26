@@ -27,16 +27,17 @@ class BaseCoin():
         How much btc for 1 coin
         """
         try:
-            if self.marketid is None:
-                return None
-            url = "http://pubapi.cryptsy.com/api.php?method=singlemarketdata&marketid=%s" %(self.marketid)
-            r,c = h.request(url)
-            data = json.loads(c)['return']['markets'][self.symbol]
-            last = data['lasttradeprice']
-            bestbid = max([i['price'] for i in data['buyorders']])
-            rate = min(last, bestbid) #use lower of last trade and best bid to avoid ghost bids to jack up everything
-            key = "%sprice" %(self.symbol)
-            self.cache.set(key, rate)
+            if self.marketid is not None:
+                url = "http://pubapi.cryptsy.com/api.php?method=singlemarketdata&marketid=%s" %(self.marketid)
+                print url
+                r,c = h.request(url)
+                data = json.loads(c)['return']['markets'][self.symbol]
+                last = data['lasttradeprice']
+                bestbid = max([i['price'] for i in data['buyorders']])
+                rate = min(last, bestbid) #use lower of last trade and best bid to avoid ghost bids to jack up everything
+                print rate
+                key = "%sprice" %(self.symbol)
+                self.cache.set(key, rate)
         except:
             print "%s pricecheck error" %(self.symbol)
 
