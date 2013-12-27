@@ -11,12 +11,12 @@ class PPcoinPredictor(BaseCoin):
         self.nInterval = 1
         self.nAveragingInterval = self.nInterval #540 blocks
         self.nTargetSpacing = 10 * 60 # 30 seconds
-        self.nAveragingTargetTimespan = self.nAveragingInterval * self.nTargetSpacing #40 minutes
+        #self.nAveragingTargetTimespan = self.nAveragingInterval * self.nTargetSpacing #40 minutes
         #self.retargetVsInspectRatio = 12.0
         #nMaxAdjustDown = 20 # 20% adjustment down
         #nMaxAdjustUp = 1 # 1% adjustment up
-        self.nMinActualTimespan = self.nAveragingTargetTimespan / 4.0
-        self.nMaxActualTimespan = self.nAveragingTargetTimespan * 4
+        #self.nMinActualTimespan = self.nAveragingTargetTimespan / 4.0
+        #self.nMaxActualTimespan = self.nAveragingTargetTimespan * 4
         self.estimateLookback  = 50 #Lookback 10 blocks to estimate network hashrate
         ### Chain specific ###
         self.coinname = "PPcoin (broken)"
@@ -111,7 +111,7 @@ class PPcoinPredictor(BaseCoin):
         new = self.get_current_difficulty()
         rate = self.get_rate_from_hashrate(lastblk, self.estimateLookback)
         multiplier = new/lastdiff
-        timeremain = lasttime + rate
+        timeremain = time.now() - (lasttime + rate)
         return rate, lasttime, timeremain, multiplier, multiplier
 
 
