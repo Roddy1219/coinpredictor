@@ -111,7 +111,7 @@ class PPcoinPredictor(BaseCoin):
         new = self.get_current_difficulty()
         rate = self.get_rate_from_hashrate(lastblk, self.estimateLookback)
         multiplier = new/lastdiff
-        timeremain = time.now() - (lasttime + rate)
+        timeremain = time.time() - (lasttime + rate)
         return rate, lasttime, timeremain, multiplier, multiplier
 
 
