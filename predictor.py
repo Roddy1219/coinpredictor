@@ -3,6 +3,7 @@ from zetacoin import ZetaPredictor
 from bitcoin import BitcoinPredictor
 from litecoin import LitecoinPredictor
 from freicoin import FreiPredictor
+from ppcoin import PPcoinPredictor
 
 import json, time, redis, sys, settings
 
@@ -12,7 +13,8 @@ def get_chains(symbols):
         "BTC": BitcoinPredictor,
         "FRC": FreiPredictor,
         "TRC":TerraPredictor,
-        "LTC": LitecoinPredictor
+        "LTC": LitecoinPredictor,
+        "PPC": PPcoinPredictor
     }
     return [chains[symbol]() for symbol in symbols]
 

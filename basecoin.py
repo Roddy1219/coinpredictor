@@ -36,8 +36,8 @@ class BaseCoin():
                 last = data['lasttradeprice']
                 bestbid = max([i['price'] for i in data['buyorders']])
                 rate = min(last, bestbid) #use lower of last trade and best bid to avoid ghost bids to jack up everything
-                print rate
                 key = "%sprice" %(self.symbol)
+                print key, rate
                 self.cache.set(key, rate)
         except:
             print "%s pricecheck error" %(self.symbol)
@@ -215,7 +215,8 @@ class BaseCoin():
             except:
                 print "%s prediction made err" %(self.symbol)
                 pass
-        predictions["market_price"] = self.fetch_btc_price()
+        if predictions is not None:
+            predictions["market_price"] = self.fetch_btc_price()
         return predictions
 
 
