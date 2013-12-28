@@ -205,10 +205,12 @@ class BaseCoin():
         """
         try:
             hashes_per_blk = predictions["current_block_difficulty"] * (2^32) / 1000000000
-            score = predictions["market_price"] * predictions["current_subsidy"] / hashes_per_blk
-            return score
+            hashes_per_blk_next = predictions["next_change_block_difficulty"] * (2^32) / 1000000000
+            predictions["profitability_score"] = predictions["market_price"] * predictions["current_subsidy"] / hashes_per_blk
+            predictions["profitability_score_next"] = predictions["market_price"] * predictions["current_subsidy"] / hashes_per_blk_next
+            return predictions
         except:
-            return None
+            return predictions
 
     def get_cached_predictions(self):
         """
@@ -232,7 +234,7 @@ class BaseCoin():
                 pass
         if predictions is not None:
             predictions["market_price"] = self.fetch_btc_price()
-            predictions["profitability_score"] = self.get_profitability_score(predictions)
+            predictions = self.get_profitability_score(predictions)
         return predictions
 
 
