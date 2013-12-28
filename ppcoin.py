@@ -22,7 +22,7 @@ class PPcoinPredictor(BaseCoin):
         self.coinname = "PPcoin (broken)"
         self.chaintype = "sha-256"
         self.symbol = "PPC"
-        self.subsidyfn = lambda height: 50*100000000 >> (height + 1)//1
+        self.subsidyfn = lambda height: self.GetProofOfWorkReward() * 100000000
         self.subsidyint = 1
         BaseCoin.__init__(self)
 
@@ -45,6 +45,27 @@ class PPcoinPredictor(BaseCoin):
                 height = height - 1
 
 
+    def GetProofOfWorkReward(self):
+        nBits = self.get_target()
+        bnTarget = nBits
+        MAX_MINT_PROOF_OF_WORK = 9999 * 1000000
+        bnSubsidyLimit = 9999 * 1000000
+        bnTargetLimit = 0x00000000FFFF0000000000000000000000000000000000000000000000000000
+        CENT = 10000
+        bnLowerBound = CENT * 1
+        bnUpperBound = bnSubsidyLimit
+        while bnLowerBound + CENT <= bnUpperBound:
+            bnMidValue = (bnLowerBound + bnUpperBound) / 2
+            if (bnMidValue * bnMidValue * bnMidValue * bnMidValue * bnTargetLimit) > (bnSubsidyLimit * bnSubsidyLimit * bnSubsidyLimit * bnSubsidyLimit * bnTarget):
+                bnUpperBound = bnMidValue
+            else:
+                bnLowerBound = bnMidValue
+        #print bnUpperBound, bnLowerBound, bnMidValue
+
+        nSubsidy = bnUpperBound
+        nSubsidy = int(nSubsidy * CENT) / CENT
+        #print nBits, nSubsidy, min(nSubsidy, MAX_MINT_PROOF_OF_WORK)
+        return min(nSubsidy, MAX_MINT_PROOF_OF_WORK) / 1000000.0 
 
 
     def getblock(self, number, cached=True):
@@ -92,12 +113,19 @@ class PPcoinPredictor(BaseCoin):
         return hashrate
 
 
-    def get_current_difficulty(self):
+    def get_target(self):
         try:
             target = self.rpc("getwork")["target"]
             #Convert to big-endian
             target = target.decode('hex')[::-1].encode('hex_codec')
-            return 0x00000000FFFF0000000000000000000000000000000000000000000000000000 / float(int(target, 16))
+            return int(target, 16)
+        except:
+            return None
+
+
+    def get_current_difficulty(self):
+        try:
+            return 0x00000000FFFF0000000000000000000000000000000000000000000000000000 / float(self.get_target())
         except:
             return None
 
@@ -118,4 +146,5 @@ class PPcoinPredictor(BaseCoin):
 
 if __name__ == "__main__":
     p = PPcoinPredictor()
+    print p.GetProofOfWorkReward()
     print p.get_predictions()
