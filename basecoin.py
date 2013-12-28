@@ -48,7 +48,10 @@ class BaseCoin():
         """
         key = "%sprice" %(self.symbol)
         rate = self.cache.get(key)
-        return rate
+        if rate is not None:
+            return float(rate)
+        else:
+            return None
 
     def getlastblock(self):
         """
@@ -195,6 +198,18 @@ class BaseCoin():
         self.cache.set(key, json.dumps(output))
         return output
 
+    def get_profitability_score(self, predictions):
+        """
+        Get relative payout.
+        How much would 1 GH make
+        """
+        try:
+            hashes_per_blk = predictions["current_block_difficulty"] * (2^32) / 1000000000
+            score = predictions["market_price"] * predictions["current_subsidy"] / hashes_per_blk
+            return score
+        except:
+            return None
+
     def get_cached_predictions(self):
         """
         Try to generate, if fails return from cache
@@ -217,6 +232,7 @@ class BaseCoin():
                 pass
         if predictions is not None:
             predictions["market_price"] = self.fetch_btc_price()
+            predictions["profitability_score"] = self.get_profitability_score(predictions)
         return predictions
 
 
