@@ -20,7 +20,7 @@ class BytecoinPredictor(BaseCoin):
         #nMaxAdjustUp = 1 # 1% adjustment up
         self.nMinActualTimespan = self.nAveragingTargetTimespan / 4.0
         self.nMaxActualTimespan = self.nAveragingTargetTimespan * 4
-        self.estimateLookback  = 144 #Lookback 10 blocks to estimate network hashrate
+        self.estimateLookback  = 20 #Lookback 10 blocks to estimate network hashrate
         ### Chain specific ###
         self.coinname = "Bytecoin"
         self.chaintype = "sha-256"
