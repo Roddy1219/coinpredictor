@@ -5,6 +5,7 @@ from litecoin import LitecoinPredictor
 from freicoin import FreiPredictor
 from ppcoin import PPcoinPredictor
 from bytecoin import BytecoinPredictor
+from unobtanium import UnobtaniumPredictor
 
 import json, time, redis, sys, settings
 
@@ -16,7 +17,8 @@ def get_chains(symbols):
         "TRC":TerraPredictor,
         "LTC": LitecoinPredictor,
         "PPC": PPcoinPredictor,
-        "BTE": BytecoinPredictor
+        "BTE": BytecoinPredictor,
+        "UNO": UnobtaniumPredictor
     }
     return [chains[symbol]() for symbol in symbols]
 
