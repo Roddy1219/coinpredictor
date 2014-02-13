@@ -22,7 +22,7 @@ class UnobtaniumPredictor(BaseCoin):
         self.coinname = "Unobtanium (experimental)"
         self.chaintype = "sha-256"
         self.symbol = "UNO"
-        self.subsidyfn = lambda height: 0.001*100000000 if height<2000  else 1*100000000 >> (height * 1)//120000
+        self.subsidyfn = lambda height: 0.001*100000000 if height<2000  else 1*100000000 >> (height * 1)//100000
         self.subsidyint = 120000
         BaseCoin.__init__(self)
 
